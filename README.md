@@ -88,3 +88,48 @@ downloads. To bump to a new release:
 
 4. Update the `alpine_version` value in the [`Dockerfile`](./Dockerfile) to match
    the new `<major.minor>` and update this `README`.
+
+## Continuous Publishing (GHCR)
+
+This repository automatically builds the image and publishes it to the GitHub
+Container Registry (GHCR) via the
+[`Publish image to GHCR`](./.github/workflows/publish.yml) GitHub Actions
+workflow.
+
+The published image is available at:
+
+```
+ghcr.io/<owner>/<repo>
+```
+
+### When it runs
+
+| Event                         | Behaviour                          |
+| ----------------------------- | ---------------------------------- |
+| Push to `master`              | Build **and push** (`latest` + version tags) |
+| Push of a `v*` tag            | Build **and push** (tag-named image) |
+| Pull request targeting `master` | Build **only** (no push), as a CI check |
+| Manual `workflow_dispatch`    | Build **and push**                 |
+
+### Image tags
+
+The workflow tags images using:
+
+- The Alpine version read directly from the `alpine_version` line in the
+  `Dockerfile` (e.g. `3.24`).
+- `latest`, when building from the default branch (`master`).
+- The git tag name, for `v*` tag pushes.
+- A short commit SHA (e.g. `sha-abc1234`).
+
+### Authentication
+
+Pushes authenticate with the built-in `GITHUB_TOKEN`; no additional secrets are
+required. The workflow requests `packages: write` permission so it can publish to
+GHCR. The first publish creates the package; make it public (or grant access)
+from the repository's *Packages* settings if external pulls are required.
+
+### Pulling the image
+
+```bash
+docker pull ghcr.io/<owner>/<repo>:latest
+```
