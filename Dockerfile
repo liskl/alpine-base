@@ -1,8 +1,8 @@
 FROM scratch
 
 # DevOps Team
-MAINTAINER Loren Lisk <loren.lisk@tstllc.net>
+LABEL org.opencontainers.image.authors="Loren Lisk <loren.lisk@liskl.com>"
 
-ENV alpine_version 3.24
+ENV alpine_version=3.24
 
 ADD alpine${alpine_version}-rootfs.tar.gz /
