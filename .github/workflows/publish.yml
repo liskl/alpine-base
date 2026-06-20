@@ -29,7 +29,7 @@ jobs:
       - name: Read Alpine version from Dockerfile
         id: alpine
         run: |
-          version="$(grep -oP '^ENV\s+alpine_version\s+\K[0-9.]+' Dockerfile)"
+          version="$(grep -oP '^ENV\s+alpine_version[=\s]+\K[0-9.]+' Dockerfile)"
           if [ -z "$version" ]; then
             echo "Could not determine alpine_version from Dockerfile" >&2
             exit 1
